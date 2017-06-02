@@ -12,14 +12,14 @@ use Drupal\views\Plugin\views\style\StylePluginBase;
  * @ingroup views_style_plugins
  *
  * @ViewsStyle(
- *   id = "json_serializer",
+ *   id = "json_feed_serializer",
  *   title = @Translation("JSON Feed"),
  *   help = @Translation("Generates a JSON feed from a view."),
  *   theme = "views_view_json",
  *   display_types = {"json_feed"}
  * )
  */
-class JsonSerializer extends StylePluginBase {
+class JsonFeedSerializer extends StylePluginBase {
 
   /**
    * Does the style plugin for itself support to add fields to it's output.

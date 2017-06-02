@@ -10,13 +10,13 @@ use Drupal\views\Plugin\views\row\RowPluginBase;
  * Plugin which displays fields for a JSON feed
  *
  * @ViewsRow(
- *   id = "json_fields",
+ *   id = "json_feed_fields",
  *   title = @Translation("JSON fields"),
  *   help = @Translation("Display fields as JSON items."),
  *   display_types = {"json_feed"}
  * )
  */
-class JsonFields extends RowPluginBase {
+class JsonFeedFields extends RowPluginBase {
 
   /**
    * Does the row plugin support to add fields to it's output.
