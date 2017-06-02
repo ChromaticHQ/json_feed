@@ -7,7 +7,7 @@ use Drupal\Core\Url;
 use Drupal\views\Plugin\views\style\StylePluginBase;
 
 /**
- * Default style plugin to render an RSS feed.
+ * Default style plugin to render a JSON feed.
  *
  * @ingroup views_style_plugins
  *
@@ -110,7 +110,7 @@ class JsonFeedSerializer extends StylePluginBase {
   }
 
   /**
-   * Get the
+   * Get the feed's URL
    *
    * @return \Drupal\Core\GeneratedUrl|null|string
    */
@@ -140,7 +140,7 @@ class JsonFeedSerializer extends StylePluginBase {
   }
 
   /**
-   * Get the first attached display Url
+   * Get the first attached display URL
    */
   protected function getAttachedDisplayUrl() {
     foreach(array_filter($this->displayHandler->options['displays']) as $attachDisplay) {

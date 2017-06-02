@@ -28,6 +28,21 @@ class JsonFeed extends Feed {
   /**
    * {@inheritdoc}
    */
+  protected $usesAJAX = FALSE;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $usesMore = FALSE;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $usesAreas = FALSE;
+
+  /**
+   * {@inheritdoc}
+   */
   public function getType() {
     return 'json_feed';
   }
@@ -63,7 +78,7 @@ class JsonFeed extends Feed {
   protected function defineOptions() {
     $options = parent::defineOptions();
 
-    // Set the default style plugin to 'json_feed_serializer'.
+    // Set the default style plugins
     $options['style']['contains']['type']['default'] = 'json_feed_serializer';
     $options['row']['contains']['type']['default'] = 'json_feed_fields';
     $options['defaults']['default']['style'] = FALSE;
@@ -82,6 +97,10 @@ class JsonFeed extends Feed {
    */
   public function optionsSummary(&$categories, &$options) {
     parent::optionsSummary($categories, $options);
+
+    unset($categories['exposed']);
+    // Hide some settings, as they aren't useful for pure data output.
+    unset($options['show_admin_links'], $options['analyze-theme']);
 
     // Remove css/exposed form settings, as they are not used for the data
     // display.
