@@ -15,7 +15,6 @@ use Drupal\views\Plugin\views\style\StylePluginBase;
  *   id = "json_feed_serializer",
  *   title = @Translation("JSON Feed"),
  *   help = @Translation("Generates a JSON feed from a view."),
- *   theme = "views_view_json",
  *   display_types = {"json_feed"}
  * )
  */
