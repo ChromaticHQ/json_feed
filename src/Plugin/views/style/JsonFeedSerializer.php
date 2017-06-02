@@ -3,6 +3,7 @@
 namespace Drupal\json_feed\Plugin\views\style;
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\views\Plugin\views\style\StylePluginBase;
 
@@ -66,6 +67,53 @@ class JsonFeedSerializer extends StylePluginBase {
   /**
    * {@inheritdoc}
    */
+  protected function defineOptions() {
+    $options = parent::defineOptions();
+
+    $options['description'] = ['default' => ''];
+
+    return $options;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildOptionsForm(&$form, FormStateInterface $form_state) {
+    parent::buildOptionsForm($form, $form_state);
+
+    $form['home_page_url_note'] = [
+      '#type' => 'item',
+      '#title' => $this->t('JSON Feed home_page_url'),
+      '#description' => $this->t('Set Link Display to your view\'s main Page display to enable home_page_url'),
+    ];
+
+    $form['description'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('JSON Feed description'),
+      '#default_value' => $this->options['description'],
+      '#description' => $this->t('This will appear in the JSON feed itself.'),
+      '#maxlength' => 1024,
+    ];
+  }
+
+  /**
+   * Get RSS feed description.
+   *
+   * @return string
+   *   The string containing the description with the tokens replaced.
+   */
+  public function getDescription() {
+    $description = $this->options['description'];
+
+    // Allow substitutions from the first row.
+    $description = $this->tokenizeValue($description, 0);
+
+    return $description;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function render() {
 
     // Build items list
@@ -80,6 +128,7 @@ class JsonFeedSerializer extends StylePluginBase {
     $feed = new \stdClass();
     $feed->version = 'https://jsonfeed.org/version/1';
     $feed->title = $this->getTitle();
+    $feed->description = $this->getDescription();
     // TODO: Add note to eventual JsonFeed options form with note to set Link Display
     $feed->home_page_url = $this->getFeedHomePageUrl();
     $feed->feed_url = $this->displayHandler->getUrl()->setAbsolute()->toString();
