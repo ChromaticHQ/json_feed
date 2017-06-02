@@ -65,7 +65,6 @@ class JsonFeed extends Feed {
 
     // Set the default style plugin to 'json_feed_serializer'.
     $options['style']['contains']['type']['default'] = 'json_feed_serializer';
-    $options['row']['contains']['type']['default'] = 'data_entity';
     $options['row']['contains']['type']['default'] = 'json_feed_fields';
     $options['defaults']['default']['style'] = FALSE;
     $options['defaults']['default']['row'] = FALSE;
