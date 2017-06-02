@@ -80,8 +80,9 @@ class JsonFeedSerializer extends StylePluginBase {
     $feed = new \stdClass();
     $feed->version = 'https://jsonfeed.org/version/1';
     $feed->title = $this->getTitle();
-    $feed->home_page_url = $this->getAttachedDisplayUrl();
-    $feed->feed_url = $this->getFeedUrl();
+    // TODO: Add note to eventual JsonFeed options form with note to set Link Display
+    $feed->home_page_url = $this->getFeedHomePageUrl();
+    $feed->feed_url = $this->displayHandler->getUrl()->setAbsolute()->toString();
     $feed->items = $items;
 
     return Json::encode($feed);
@@ -110,51 +111,33 @@ class JsonFeedSerializer extends StylePluginBase {
   }
 
   /**
-   * Get the feed's URL
-   *
-   * @return \Drupal\Core\GeneratedUrl|null|string
+   * Get the first attached display URL
    */
-  protected function getFeedUrl() {
-    $config = \Drupal::config('system.site');
-
+  protected function getFeedHomePageUrl() {
+    // Figure out which display which has a path we're using for this feed. If
+    // there isn't one, use the global $base_url
     $link_display_id = $this->view->display_handler->getLinkDisplay();
     if ($link_display_id && $display = $this->view->displayHandlers->get($link_display_id)) {
       $url = $this->view->getUrl(NULL, $link_display_id);
     }
 
+    $url_options = ['absolute' => TRUE];
+    $base_url = Url::fromRoute('<front>')->setAbsolute()->toString();
+
     /** @var \Drupal\Core\Url $url */
     if ($url) {
-      $url_options = ['absolute' => TRUE];
-
       // Compare the link to the default home page; if it's the default home page,
       // just use $base_url.
+      $config = \Drupal::config('system.site');
       $url_string = $url->setOptions($url_options)->toString();
       if ($url_string === Url::fromUserInput($config->get('page.front'))->toString()) {
-        $url_string = Url::fromRoute('<front>')->setAbsolute()->toString();
+        $url_string = $base_url;
       }
 
       return $url_string;
     }
 
-    return null;
-  }
-
-  /**
-   * Get the first attached display URL
-   */
-  protected function getAttachedDisplayUrl() {
-    foreach(array_filter($this->displayHandler->options['displays']) as $attachDisplay) {
-      $display_handler = $this->view->displayHandlers->get($attachDisplay);
-      if ($display_handler->isEnabled()) {
-        $url = $this->view->getUrl(NULL, $attachDisplay);
-        if ($url) {
-          $url_options = ['absolute' => TRUE];
-          return $url->setOptions($url_options)->toString();
-        }
-      }
-    }
-
-    return null;
+    return $base_url;
   }
 
 }
