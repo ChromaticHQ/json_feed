@@ -3,6 +3,7 @@
 namespace Drupal\json_feed\Plugin\views\row;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 use Drupal\views\Plugin\views\row\RowPluginBase;
 
 /**
@@ -31,6 +32,7 @@ class JsonFields extends RowPluginBase {
     $options = parent::defineOptions();
     $options['id'] = ['default' => ''];
     $options['url'] = ['default' => ''];
+    $options['title'] = ['default' => ''];
     return $options;
   }
 
@@ -50,14 +52,24 @@ class JsonFields extends RowPluginBase {
       '#description' => $this->t('The field that is going to be used as the JSON id attribute for each row.'),
       '#options' => $view_fields_labels,
       '#default_value' => $this->options['id_field'],
+      '#required' => TRUE,
     ];
 
     $form['url_field'] = [
       '#type' => 'select',
       '#title' => $this->t('url attribute'),
-      '#description' => $this->t('The field that is going to be used as the JSON url attribute for each row.'),
+      '#description' => $this->t('The field that is going to be used as the JSON url attribute for each row. This must be a drupal relative path.'),
       '#options' => $view_fields_labels,
       '#default_value' => $this->options['url_field'],
+      '#required' => TRUE,
+    ];
+
+    $form['title_field'] = [
+      '#type' => 'select',
+      '#title' => $this->t('title attribute'),
+      '#description' => $this->t('The field that is going to be used as the JSON title attribute for each row. This must be plain text, not linked to the content.'),
+      '#options' => $view_fields_labels,
+      '#default_value' => $this->options['title_field'],
     ];
   }
 
@@ -66,8 +78,12 @@ class JsonFields extends RowPluginBase {
    */
   public function validate() {
     $errors = parent::validate();
-    if (empty($this->options['id_field'])) {
-      $errors[] = $this->t('Row style plugin requires specifying which views field to use for JSON id attribute.');
+    $required_options = ['id_field', 'url_field'];
+    foreach ($required_options as $required_option) {
+      if (empty($this->options[$required_option])) {
+        $errors[] = $this->t('Row style plugin requires specifying which views fields to use for JSON feed item.');
+        break;
+      }
     }
     return $errors;
   }
@@ -80,7 +96,8 @@ class JsonFields extends RowPluginBase {
     $item = [];
     $row_index = $this->view->row_index;
     $item['id'] = $this->getField($row_index, $this->options['id_field']);
-    $item['url'] = $this->getField($row_index, $this->options['url_field']);
+    $item['url'] = Url::fromUserInput($this->getField($row_index, $this->options['url_field']))->setAbsolute()->toString();
+    $item['title'] = $this->getField($row_index, $this->options['title_field']);
 
     // Remove empty attributes.
     $item = array_filter($item);
