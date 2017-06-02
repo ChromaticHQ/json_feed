@@ -129,7 +129,6 @@ class JsonFeedSerializer extends StylePluginBase {
     $feed->version = 'https://jsonfeed.org/version/1';
     $feed->title = $this->getTitle();
     $feed->description = $this->getDescription();
-    // TODO: Add note to eventual JsonFeed options form with note to set Link Display
     $feed->home_page_url = $this->getFeedHomePageUrl();
     $feed->feed_url = $this->displayHandler->getUrl()->setAbsolute()->toString();
     $feed->items = $items;
