@@ -94,6 +94,13 @@ class JsonFeedSerializer extends StylePluginBase {
       '#description' => $this->t('This will appear in the JSON feed itself.'),
       '#maxlength' => 1024,
     ];
+
+    $form['expired'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Feed Expired'),
+      '#default_value' => $this->options['expired'],
+      '#description' => $this->t('Specifies whether or not the feed is finished and will ever update again. For instance, a feed for a temporary event could expire.'),
+    ];
   }
 
   /**
@@ -131,6 +138,7 @@ class JsonFeedSerializer extends StylePluginBase {
     $feed->description = $this->getDescription();
     $feed->home_page_url = $this->getFeedHomePageUrl();
     $feed->feed_url = $this->displayHandler->getUrl()->setAbsolute()->toString();
+    $feed->expired = $this->options['expired'] ? TRUE : FALSE;
     $feed->items = $items;
 
     return Json::encode($feed);
