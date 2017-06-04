@@ -72,6 +72,14 @@ class JsonFeedFields extends RowPluginBase {
       '#default_value' => $this->options['title_field'],
     ];
 
+    $form['content_html_field'] = [
+      '#type' => 'select',
+      '#title' => $this->t('content_html attribute'),
+      '#description' => $this->t('The field that is going to be used as the JSON content_html attribute for each row. This is the only attribute in the JSON Feed spec that allows HTML.'),
+      '#options' => $view_fields_labels,
+      '#default_value' => $this->options['content_html_field'],
+    ];
+
     $form['image_field'] = [
       '#type' => 'select',
       '#title' => $this->t('image attribute'),
@@ -114,6 +122,7 @@ class JsonFeedFields extends RowPluginBase {
     $item['id'] = $this->getField($row_index, $this->options['id_field']);
     $item['url'] = $this->getAbsoluteUrlForField($row_index, 'url_field');
     $item['title'] = $this->getField($row_index, $this->options['title_field']);
+    $item['content_html'] = $this->getField($row_index, $this->options['content_html_field']);
     $item['image'] = $this->getAbsoluteUrlForField($row_index, 'image_field');
     $item['banner_image'] = $this->getAbsoluteUrlForField($row_index, 'banner_image_field');
 
