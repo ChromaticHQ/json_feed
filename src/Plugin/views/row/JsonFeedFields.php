@@ -49,7 +49,7 @@ class JsonFeedFields extends RowPluginBase {
     $form['id_field'] = [
       '#type' => 'select',
       '#title' => $this->t('id attribute'),
-      '#description' => $this->t('The field that is going to be used as the JSON id attribute for each row.'),
+      '#description' => $this->t('JSON id attribute.'),
       '#options' => $view_fields_labels,
       '#default_value' => $this->options['id_field'],
       '#required' => TRUE,
@@ -58,7 +58,7 @@ class JsonFeedFields extends RowPluginBase {
     $form['url_field'] = [
       '#type' => 'select',
       '#title' => $this->t('url attribute'),
-      '#description' => $this->t('The field that is going to be used as the JSON url attribute for each row. This must be a drupal relative path.'),
+      '#description' => $this->t('JSON url attribute. This must be a drupal relative path.'),
       '#options' => $view_fields_labels,
       '#default_value' => $this->options['url_field'],
       '#required' => TRUE,
@@ -67,7 +67,7 @@ class JsonFeedFields extends RowPluginBase {
     $form['title_field'] = [
       '#type' => 'select',
       '#title' => $this->t('title attribute'),
-      '#description' => $this->t('The field that is going to be used as the JSON title attribute for each row. This must be plain text, not linked to the content.'),
+      '#description' => $this->t('JSON title attribute. This must be plain text, not linked to the content.'),
       '#options' => $view_fields_labels,
       '#default_value' => $this->options['title_field'],
     ];
@@ -75,7 +75,7 @@ class JsonFeedFields extends RowPluginBase {
     $form['content_html_field'] = [
       '#type' => 'select',
       '#title' => $this->t('content_html attribute'),
-      '#description' => $this->t('The field that is going to be used as the JSON content_html attribute for each row. This is the only attribute in the JSON Feed spec that allows HTML.'),
+      '#description' => $this->t('JSON content_html attribute. This is the only attribute in the JSON Feed spec that allows HTML.'),
       '#options' => $view_fields_labels,
       '#default_value' => $this->options['content_html_field'],
     ];
@@ -83,7 +83,7 @@ class JsonFeedFields extends RowPluginBase {
     $form['content_text_field'] = [
       '#type' => 'select',
       '#title' => $this->t('content_text attribute'),
-      '#description' => $this->t('The field that is going to be used as the JSON content_text attribute for each row.'),
+      '#description' => $this->t('JSON content_text attribute.'),
       '#options' => $view_fields_labels,
       '#default_value' => $this->options['content_text_field'],
     ];
@@ -91,7 +91,7 @@ class JsonFeedFields extends RowPluginBase {
     $form['summary_field'] = [
       '#type' => 'select',
       '#title' => $this->t('summary attribute'),
-      '#description' => $this->t('The field that is going to be used as the JSON summary attribute for each row. This should be plain text.'),
+      '#description' => $this->t('JSON summary attribute. This should be plain text.'),
       '#options' => $view_fields_labels,
       '#default_value' => $this->options['summary_field'],
     ];
@@ -115,7 +115,7 @@ class JsonFeedFields extends RowPluginBase {
     $form['date_published_field'] = [
       '#type' => 'select',
       '#title' => $this->t('date_published attribute'),
-      '#description' => $this->t("The date that is going to be used as the JSON date_published attribute for each row, formatted as RFC 3339 (Y-m-d\\TH:i:sP)"),
+      '#description' => $this->t("JSON date_published attribute, formatted as RFC 3339 (Y-m-d\\TH:i:sP)"),
       '#options' => $view_fields_labels,
       '#default_value' => $this->options['date_published_field'],
     ];
@@ -123,7 +123,7 @@ class JsonFeedFields extends RowPluginBase {
     $form['date_modified_field'] = [
       '#type' => 'select',
       '#title' => $this->t('date_modified attribute'),
-      '#description' => $this->t("The date that is going to be used as the JSON date_modified attribute for each row, formatted as RFC 3339 (Y-m-d\\TH:i:sP)"),
+      '#description' => $this->t("JSON date_modified attribute, formatted as RFC 3339 (Y-m-d\\TH:i:sP)"),
       '#options' => $view_fields_labels,
       '#default_value' => $this->options['date_modified_field'],
     ];
