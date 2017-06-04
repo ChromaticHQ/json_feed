@@ -71,6 +71,22 @@ class JsonFeedFields extends RowPluginBase {
       '#options' => $view_fields_labels,
       '#default_value' => $this->options['title_field'],
     ];
+
+    $form['image_field'] = [
+      '#type' => 'select',
+      '#title' => $this->t('image attribute'),
+      '#description' => $this->t('The URL of the main image for the item. Feed readers may use the image as a preview.'),
+      '#options' => $view_fields_labels,
+      '#default_value' => $this->options['image_field'],
+    ];
+
+    $form['banner_image_field'] = [
+      '#type' => 'select',
+      '#title' => $this->t('banner image attribute'),
+      '#description' => $this->t('The URL of an image to use as a banner. A feed reader with a detail view may choose to show this banner image at the top of the detail view, possibly with the title overlaid.'),
+      '#options' => $view_fields_labels,
+      '#default_value' => $this->options['banner_image_field'],
+    ];
   }
 
   /**
@@ -96,8 +112,10 @@ class JsonFeedFields extends RowPluginBase {
     $item = [];
     $row_index = $this->view->row_index;
     $item['id'] = $this->getField($row_index, $this->options['id_field']);
-    $item['url'] = Url::fromUserInput($this->getField($row_index, $this->options['url_field']))->setAbsolute()->toString();
+    $item['url'] = $this->getAbsoluteUrlForField($row_index, 'url_field');
     $item['title'] = $this->getField($row_index, $this->options['title_field']);
+    $item['image'] = $this->getAbsoluteUrlForField($row_index, 'image_field');
+    $item['banner_image'] = $this->getAbsoluteUrlForField($row_index, 'banner_image_field');
 
     // Remove empty attributes.
     $item = array_filter($item);
@@ -121,6 +139,25 @@ class JsonFeedFields extends RowPluginBase {
       return '';
     }
     return (string) $this->view->style_plugin->getField($index, $field_id);
+  }
+
+  /**
+   * If the field value exists, return it as an absolute URL.
+   *
+   * @param int $row_index
+   * @param string $field_id
+   *
+   * @return \Drupal\Core\GeneratedUrl|null|string
+   */
+  protected function getAbsoluteUrlForField($row_index, $field_id) {
+    if ($this->options[$field_id]) {
+      $field_value = $this->getField($row_index, $this->options[$field_id]);
+      if (!strstr($field_value, '/') !== 0) {
+        $field_value = '/' . $field_value;
+      }
+      return Url::fromUserInput($field_value)->setAbsolute()->toString();
+    }
+    return null;
   }
 
 }
