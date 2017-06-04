@@ -88,6 +88,14 @@ class JsonFeedFields extends RowPluginBase {
       '#default_value' => $this->options['content_text_field'],
     ];
 
+    $form['summary_field'] = [
+      '#type' => 'select',
+      '#title' => $this->t('summary attribute'),
+      '#description' => $this->t('The field that is going to be used as the JSON summary attribute for each row. This should be plain text.'),
+      '#options' => $view_fields_labels,
+      '#default_value' => $this->options['summary_field'],
+    ];
+
     $form['image_field'] = [
       '#type' => 'select',
       '#title' => $this->t('image attribute'),
@@ -139,6 +147,7 @@ class JsonFeedFields extends RowPluginBase {
     $item['title'] = $this->getField($row_index, $this->options['title_field']);
     $item['content_html'] = $this->getField($row_index, $this->options['content_html_field']);
     $item['content_text'] = $this->getField($row_index, $this->options['content_text_field']);
+    $item['summary'] = $this->getField($row_index, $this->options['summary_field']);
     $item['image'] = $this->getAbsoluteUrlForField($row_index, 'image_field');
     $item['banner_image'] = $this->getAbsoluteUrlForField($row_index, 'banner_image_field');
 
