@@ -111,6 +111,22 @@ class JsonFeedFields extends RowPluginBase {
       '#options' => $view_fields_labels,
       '#default_value' => $this->options['banner_image_field'],
     ];
+
+    $form['date_published_field'] = [
+      '#type' => 'select',
+      '#title' => $this->t('date_published attribute'),
+      '#description' => $this->t("The date that is going to be used as the JSON date_published attribute for each row, formatted as RFC 3339 (Y-m-d\\TH:i:sP)"),
+      '#options' => $view_fields_labels,
+      '#default_value' => $this->options['date_published_field'],
+    ];
+
+    $form['date_modified_field'] = [
+      '#type' => 'select',
+      '#title' => $this->t('date_modified attribute'),
+      '#description' => $this->t("The date that is going to be used as the JSON date_modified attribute for each row, formatted as RFC 3339 (Y-m-d\\TH:i:sP)"),
+      '#options' => $view_fields_labels,
+      '#default_value' => $this->options['date_modified_field'],
+    ];
   }
 
   /**
@@ -150,6 +166,8 @@ class JsonFeedFields extends RowPluginBase {
     $item['summary'] = $this->getField($row_index, $this->options['summary_field']);
     $item['image'] = $this->getAbsoluteUrlForField($row_index, 'image_field');
     $item['banner_image'] = $this->getAbsoluteUrlForField($row_index, 'banner_image_field');
+    $item['date_published'] = $this->getField($row_index, $this->options['date_published_field']);
+    $item['date_modified'] = $this->getField($row_index, $this->options['date_modified_field']);
 
     // Remove empty attributes.
     $item = array_filter($item);
