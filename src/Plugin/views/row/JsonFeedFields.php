@@ -49,7 +49,7 @@ class JsonFeedFields extends RowPluginBase {
     $form['id_field'] = [
       '#type' => 'select',
       '#title' => $this->t('id attribute'),
-      '#description' => $this->t('JSON id attribute.'),
+      '#description' => $this->t('Unique identifier for this item over time.'),
       '#options' => $view_fields_labels,
       '#default_value' => $this->options['id_field'],
       '#required' => TRUE,
@@ -58,7 +58,7 @@ class JsonFeedFields extends RowPluginBase {
     $form['url_field'] = [
       '#type' => 'select',
       '#title' => $this->t('url attribute'),
-      '#description' => $this->t('JSON url attribute. This must be a drupal relative path.'),
+      '#description' => $this->t('Permanent link to this item.'),
       '#options' => $view_fields_labels,
       '#default_value' => $this->options['url_field'],
       '#required' => TRUE,
@@ -91,7 +91,7 @@ class JsonFeedFields extends RowPluginBase {
     $form['summary_field'] = [
       '#type' => 'select',
       '#title' => $this->t('summary attribute'),
-      '#description' => $this->t('JSON summary attribute. This should be plain text.'),
+      '#description' => $this->t('JSON summary attribute. This must be plain text.'),
       '#options' => $view_fields_labels,
       '#default_value' => $this->options['summary_field'],
     ];
