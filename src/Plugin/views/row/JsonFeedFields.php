@@ -127,6 +127,14 @@ class JsonFeedFields extends RowPluginBase {
       '#options' => $view_fields_labels,
       '#default_value' => $this->options['date_modified_field'],
     ];
+
+    $form['tags_field'] = [
+      '#type' => 'select',
+      '#title' => $this->t('tags attribute'),
+      '#description' => $this->t("JSON tags attribute. Accepts a comma seperated list of tag names."),
+      '#options' => $view_fields_labels,
+      '#default_value' => $this->options['tags_field'],
+    ];
   }
 
   /**
@@ -168,6 +176,7 @@ class JsonFeedFields extends RowPluginBase {
     $item['banner_image'] = $this->getAbsoluteUrlForField($row_index, 'banner_image_field');
     $item['date_published'] = $this->getField($row_index, $this->options['date_published_field']);
     $item['date_modified'] = $this->getField($row_index, $this->options['date_modified_field']);
+    $item['tags'] = $this->getTags($row_index, $this->options['tags_field']);
 
     // Remove empty attributes.
     $item = array_filter($item);
@@ -210,6 +219,22 @@ class JsonFeedFields extends RowPluginBase {
       return Url::fromUserInput($field_value)->setAbsolute()->toString();
     }
     return null;
+  }
+
+  /**
+   * Retrieve and format tag attribute values.
+   *
+   * @param int $row_index
+   *   The index count of the row as expected by views_plugin_style::getField().
+   * @param string $field_id
+   *   The ID assigned to the required field in the display.
+   *
+   * @return array
+   *   An array of tag strings.
+   */
+  protected function getTags($row_index, $field_id) {
+    $tags_csv = $this->getField($row_index, $field_id);
+    return array_map('trim', explode(',', $tags_csv));
   }
 
 }
