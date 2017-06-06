@@ -31,6 +31,11 @@ class JsonFeed extends Feed {
   protected $usesAJAX = FALSE;
 
   /**
+   * Re-enable pager
+   */
+  protected $usesPager = TRUE;
+
+  /**
    * {@inheritdoc}
    */
   protected $usesMore = FALSE;

@@ -138,6 +138,11 @@ class JsonFeedSerializer extends StylePluginBase {
     $feed->description = $this->getDescription();
     $feed->home_page_url = $this->getFeedHomePageUrl();
     $feed->feed_url = $this->displayHandler->getUrl()->setAbsolute()->toString();
+
+    if ($next_url = $this->getNextPage()) {
+      $feed->next_url = $next_url;
+    }
+
     $feed->expired = $this->options['expired'] ? TRUE : FALSE;
     $feed->items = $items;
 
@@ -194,6 +199,30 @@ class JsonFeedSerializer extends StylePluginBase {
     }
 
     return $base_url;
+  }
+
+  /**
+   * Get the URL of the next page
+   */
+  protected function getNextPage() {
+    if ($pager = $this->displayHandler->getPlugin('pager')) {
+      $element = $pager->options['id'];
+
+      // Not using pager, so don't return a URL
+      if ($element === null) return null;
+
+      global $pager_page_array, $pager_total;
+
+      // Return the URL of the next page if there are any more
+      if ($pager_page_array[$element] < ($pager_total[$element] - 1)) {
+        $options = [
+          'query' => pager_query_add_page([], $element, $pager_page_array[$element] + 1),
+        ];
+        return Url::fromRoute('<current>', [], $options)->setAbsolute()->toString();
+      }
+    }
+
+    return null;
   }
 
 }
