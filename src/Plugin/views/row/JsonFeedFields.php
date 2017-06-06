@@ -135,6 +135,39 @@ class JsonFeedFields extends RowPluginBase {
       '#options' => $view_fields_labels,
       '#default_value' => $this->options['tags_field'],
     ];
+
+    $form['author'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Author'),
+      '#open' => TRUE,
+    ];
+
+    $form['author_name_field'] = [
+      '#fieldset' => 'author',
+      '#type' => 'select',
+      '#title' => $this->t('item author name attribute'),
+      '#description' => $this->t("JSON author name attribute."),
+      '#options' => $view_fields_labels,
+      '#default_value' => $this->options['author_name_field'],
+    ];
+
+    $form['author_url_field'] = [
+      '#fieldset' => 'author',
+      '#type' => 'select',
+      '#title' => $this->t('item author url attribute'),
+      '#description' => $this->t("The URL of a site owned by the item's author."),
+      '#options' => $view_fields_labels,
+      '#default_value' => $this->options['author_url_field'],
+    ];
+
+    $form['author_avatar_field'] = [
+      '#fieldset' => 'author',
+      '#type' => 'select',
+      '#title' => $this->t('item author avatar attribute'),
+      '#description' => $this->t("The URL for an image for the item's author."),
+      '#options' => $view_fields_labels,
+      '#default_value' => $this->options['author_avatar_field'],
+    ];
   }
 
   /**
@@ -176,9 +209,15 @@ class JsonFeedFields extends RowPluginBase {
     $item['banner_image'] = $this->getAbsoluteUrlForField($row_index, 'banner_image_field');
     $item['date_published'] = $this->getField($row_index, $this->options['date_published_field']);
     $item['date_modified'] = $this->getField($row_index, $this->options['date_modified_field']);
+    $item['author'] = [
+      'name' => $this->getField($row_index, $this->options['author_name_field']),
+      'url' => $this->getAbsoluteUrlForField($row_index, 'author_url_field'),
+      'avatar' => $this->getField($row_index, $this->options['author_avatar_field']),
+    ];
     $item['tags'] = $this->getTags($row_index, $this->options['tags_field']);
 
     // Remove empty attributes.
+    $item['author'] = array_filter($item['author']);
     $item = array_filter($item);
 
     return $item;
