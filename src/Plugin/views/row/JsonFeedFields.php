@@ -213,7 +213,7 @@ class JsonFeedFields extends RowPluginBase {
   protected function getAbsoluteUrlForField($row_index, $field_id) {
     if ($this->options[$field_id]) {
       $field_value = $this->getField($row_index, $this->options[$field_id]);
-      if (!strstr($field_value, '/') !== 0) {
+      if (strpos($field_value, '/') !== 0) {
         $field_value = '/' . $field_value;
       }
       return Url::fromUserInput($field_value)->setAbsolute()->toString();
