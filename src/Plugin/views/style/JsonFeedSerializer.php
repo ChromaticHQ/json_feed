@@ -95,6 +95,33 @@ class JsonFeedSerializer extends StylePluginBase {
       '#maxlength' => 1024,
     ];
 
+    $form['author'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Author'),
+      '#open' => TRUE,
+    ];
+
+    $form['author']['author_name_field'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('feed author name attribute'),
+      '#description' => $this->t("JSON author name attribute."),
+      '#default_value' => $this->options['author']['author_name_field'],
+    ];
+
+    $form['author']['author_url_field'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('feed author url attribute'),
+      '#description' => $this->t("The URL of a site owned by the feed's author."),
+      '#default_value' => $this->options['author']['author_url_field'],
+    ];
+
+    $form['author']['author_avatar_field'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('feed author avatar attribute'),
+      '#description' => $this->t("The URL for an image for the feed's author."),
+      '#default_value' => $this->options['author']['author_avatar_field'],
+    ];
+
     $form['expired'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Feed Expired'),
@@ -119,6 +146,25 @@ class JsonFeedSerializer extends StylePluginBase {
   }
 
   /**
+   * Get JSON feed author information.
+   *
+   * @return array
+   *   An array containing the feed's author data.
+   */
+  protected function getAuthor() {
+    $author_data = $this->options['author'];
+
+    $author['name'] = !empty($author_data['author_name_field']) ? $author_data['author_name_field'] : NULL;
+    $author['url'] = !empty($author_data['author_url_field']) ? $author_data['author_url_field'] : NULL;
+    $author['avatar'] = !empty($author_data['author_avatar_field']) ? $author_data['author_avatar_field'] : NULL;
+
+    // Remove empty attributes.
+    $author = array_filter($author);
+
+    return $author;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function render() {
@@ -138,6 +184,7 @@ class JsonFeedSerializer extends StylePluginBase {
     $feed->description = $this->getDescription();
     $feed->home_page_url = $this->getFeedHomePageUrl();
     $feed->feed_url = $this->displayHandler->getUrl()->setAbsolute()->toString();
+    $feed->author = $this->getAuthor();
 
     if ($next_url = $this->getNextPage()) {
       $feed->next_url = $next_url;
