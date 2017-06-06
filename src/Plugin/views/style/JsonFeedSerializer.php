@@ -131,6 +131,18 @@ class JsonFeedSerializer extends StylePluginBase {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function validate() {
+    $errors = parent::validate();
+    // Ensure there's a title
+    if (!$this->view->display_handler->getOption('sitename_title') && !$this->view->getTitle()) {
+      $errors[] = $this->t('The view must have a title');
+    }
+    return $errors;
+  }
+
+  /**
    * Get RSS feed description.
    *
    * @return string
