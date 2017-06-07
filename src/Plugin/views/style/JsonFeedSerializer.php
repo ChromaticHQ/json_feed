@@ -164,6 +164,9 @@ class JsonFeedSerializer extends StylePluginBase {
    *   An array containing the feed's author data.
    */
   protected function getAuthor() {
+    if (empty($this->options['author'])) {
+      return [];
+    }
     $author_data = $this->options['author'];
 
     $author['name'] = !empty($author_data['author_name_field']) ? $author_data['author_name_field'] : NULL;
