@@ -199,6 +199,7 @@ class JsonFeedSerializer extends StylePluginBase {
     $feed->description = $this->getDescription();
     $feed->home_page_url = $this->getFeedHomePageUrl();
     $feed->feed_url = $this->displayHandler->getUrl()->setAbsolute()->toString();
+    $feed->favicon = $this->getFavicon();
     $feed->author = $this->getAuthor();
 
     if ($next_url = $this->getNextPage()) {
@@ -290,6 +291,17 @@ class JsonFeedSerializer extends StylePluginBase {
     }
 
     return NULL;
+  }
+
+  /**
+   * Get the favicon URL.
+   *
+   * @return string
+   *   String contraining the URL of the site's favicon.
+   */
+  protected function getFavicon() {
+    $favicon = theme_get_setting('favicon.url');
+    return $favicon ? Url::fromUserInput($favicon)->setAbsolute()->toString() : NULL;
   }
 
 }
