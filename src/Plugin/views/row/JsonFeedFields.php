@@ -7,7 +7,7 @@ use Drupal\Core\Url;
 use Drupal\views\Plugin\views\row\RowPluginBase;
 
 /**
- * Plugin which displays fields for a JSON feed
+ * Plugin which displays fields for a JSON feed.
  *
  * @ViewsRow(
  *   id = "json_feed_fields",
@@ -196,7 +196,7 @@ class JsonFeedFields extends RowPluginBase {
    * {@inheritdoc}
    */
   public function render($row) {
-    // Create the JSON item
+    // Create the JSON item.
     $item = [];
     $row_index = $this->view->row_index;
     $item['id'] = $this->getField($row_index, $this->options['id_field']);
@@ -257,7 +257,7 @@ class JsonFeedFields extends RowPluginBase {
       }
       return Url::fromUserInput($field_value)->setAbsolute()->toString();
     }
-    return null;
+    return NULL;
   }
 
   /**

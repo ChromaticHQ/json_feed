@@ -46,7 +46,7 @@ class JsonFeedSerializer extends StylePluginBase {
 
     $url = $feed_url->setOptions($url_options)->toString();
 
-    $build['#attached']['library'][] =  'json_feed/json-feed';
+    $build['#attached']['library'][] = 'json_feed/json-feed';
 
     // Add the feed icon to the view.
     $this->view->feedIcons[] = [
@@ -135,7 +135,7 @@ class JsonFeedSerializer extends StylePluginBase {
    */
   public function validate() {
     $errors = parent::validate();
-    // Ensure there's a title
+    // Ensure there's a title.
     if (!$this->view->display_handler->getOption('sitename_title') && !$this->view->getTitle()) {
       $errors[] = $this->t('The view must have a title');
     }
@@ -184,7 +184,7 @@ class JsonFeedSerializer extends StylePluginBase {
    */
   public function render() {
 
-    // Build items list
+    // Build items list.
     $items = [];
     foreach ($this->view->result as $row_index => $row) {
       $this->view->row_index = $row_index;
@@ -192,7 +192,7 @@ class JsonFeedSerializer extends StylePluginBase {
     }
     unset($this->view->row_index);
 
-    // Create feed object
+    // Create feed object.
     $feed = new \stdClass();
     $feed->version = 'https://jsonfeed.org/version/1';
     $feed->title = $this->getTitle();
@@ -212,14 +212,14 @@ class JsonFeedSerializer extends StylePluginBase {
   }
 
   /**
-   * Get the feed title
+   * Get the feed title.
    *
    * @return string
    */
   protected function getTitle() {
     $config = \Drupal::config('system.site');
 
-    // Find title
+    // Find title.
     if ($this->view->display_handler->getOption('sitename_title')) {
       $title = $config->get('name');
       if ($slogan = $config->get('slogan')) {
@@ -234,11 +234,11 @@ class JsonFeedSerializer extends StylePluginBase {
   }
 
   /**
-   * Get the first attached display URL
+   * Get the first attached display URL.
    */
   protected function getFeedHomePageUrl() {
     // Figure out which display which has a path we're using for this feed. If
-    // there isn't one, use the global $base_url
+    // there isn't one, use the global $base_url.
     $link_display_id = $this->view->display_handler->getLinkDisplay();
     if ($link_display_id && $display = $this->view->displayHandlers->get($link_display_id)) {
       $url = $this->view->getUrl(NULL, $link_display_id);
@@ -264,19 +264,23 @@ class JsonFeedSerializer extends StylePluginBase {
   }
 
   /**
-   * Get the URL of the next page
+   * Get the URL of the next page.
    */
   protected function getNextPage() {
-    // Check for pager and pager settings
+    // Check for pager and pager settings.
     $pager = $this->displayHandler->getPlugin('pager');
-    if (!$pager) return null;
+    if (!$pager) {
+      return NULL;
+    }
 
-    $element = empty($pager->options['id']) ? null : $pager->options['id'];
-    if (!$element) return null;
+    $element = empty($pager->options['id']) ? NULL : $pager->options['id'];
+    if (!$element) {
+      return NULL;
+    }
 
     global $pager_page_array, $pager_total;
 
-    // Return the URL of the next page if there are any more
+    // Return the URL of the next page if there are any more.
     if ($pager_page_array[$element] < ($pager_total[$element] - 1)) {
       $options = [
         'query' => pager_query_add_page([], $element, $pager_page_array[$element] + 1),
@@ -284,7 +288,7 @@ class JsonFeedSerializer extends StylePluginBase {
       return Url::fromRoute('<current>', [], $options)->setAbsolute()->toString();
     }
 
-    return null;
+    return NULL;
   }
 
 }

@@ -2,7 +2,6 @@
 
 namespace Drupal\json_feed\Plugin\views\display;
 
-
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Cache\CacheableResponse;
 use Drupal\Core\Render\RenderContext;
@@ -10,7 +9,7 @@ use Drupal\views\Plugin\views\display\Feed;
 use Drupal\views\Render\ViewsRenderPipelineMarkup;
 
 /**
- * The plugin that handles a JSON feed
+ * The plugin that handles a JSON feed.
  *
  * @ingroup views_display_plugins
  *
@@ -31,7 +30,7 @@ class JsonFeed extends Feed {
   protected $usesAJAX = FALSE;
 
   /**
-   * Re-enable pager
+   * Re-enable pager.
    */
   protected $usesPager = TRUE;
 
@@ -83,7 +82,7 @@ class JsonFeed extends Feed {
   protected function defineOptions() {
     $options = parent::defineOptions();
 
-    // Set the default style plugins
+    // Set the default style plugins.
     $options['style']['contains']['type']['default'] = 'json_feed_serializer';
     $options['row']['contains']['type']['default'] = 'json_feed_fields';
     $options['defaults']['default']['style'] = FALSE;
@@ -119,7 +118,7 @@ class JsonFeed extends Feed {
    */
   public function render() {
     $build = [];
-    $build['#markup'] = $this->getRenderer()->executeInRenderContext(new RenderContext(), function() {
+    $build['#markup'] = $this->getRenderer()->executeInRenderContext(new RenderContext(), function () {
       return $this->view->style_plugin->render();
     });
 
@@ -140,7 +139,6 @@ class JsonFeed extends Feed {
 
     return $build;
   }
-
 
   /**
    * {@inheritdoc}
