@@ -84,7 +84,7 @@ class JsonFeedSerializer extends StylePluginBase {
     $form['home_page_url_note'] = [
       '#type' => 'item',
       '#title' => $this->t('JSON Feed home_page_url'),
-      '#description' => $this->t('Set Link Display to your view\'s main Page display to enable home_page_url'),
+      '#description' => $this->t("Set Link Display to your view's main Page display to enable home_page_url"),
     ];
 
     $form['description'] = [
@@ -215,6 +215,7 @@ class JsonFeedSerializer extends StylePluginBase {
    * Get the feed title.
    *
    * @return string
+   *   The title to use for the feed
    */
   protected function getTitle() {
     $config = \Drupal::config('system.site');
@@ -234,7 +235,7 @@ class JsonFeedSerializer extends StylePluginBase {
   }
 
   /**
-   * Get the first attached display URL.
+   * The URL of the feed.
    */
   protected function getFeedHomePageUrl() {
     // Figure out which display which has a path we're using for this feed. If
@@ -249,8 +250,8 @@ class JsonFeedSerializer extends StylePluginBase {
 
     /** @var \Drupal\Core\Url $url */
     if ($url) {
-      // Compare the link to the default home page; if it's the default home page,
-      // just use $base_url.
+      // Compare the link to the default home page; if it's the default home
+      // page, just use $base_url.
       $config = \Drupal::config('system.site');
       $url_string = $url->setOptions($url_options)->toString();
       if ($url_string === Url::fromUserInput($config->get('page.front'))->toString()) {

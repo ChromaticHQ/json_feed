@@ -31,6 +31,8 @@ class JsonFeed extends Feed {
 
   /**
    * Re-enable pager.
+   *
+   * @var bool
    */
   protected $usesPager = TRUE;
 
@@ -88,7 +90,7 @@ class JsonFeed extends Feed {
     $options['defaults']['default']['style'] = FALSE;
     $options['defaults']['default']['row'] = FALSE;
 
-    // Remove css/exposed form settings, as they are not used for the data display.
+    // Remove unused form settings.
     unset($options['exposed_form']);
     unset($options['exposed_block']);
     unset($options['css_class']);
@@ -106,8 +108,7 @@ class JsonFeed extends Feed {
     // Hide some settings, as they aren't useful for pure data output.
     unset($options['show_admin_links'], $options['analyze-theme']);
 
-    // Remove css/exposed form settings, as they are not used for the data
-    // display.
+    // Remove unused form settings.
     unset($options['exposed_form']);
     unset($options['exposed_block']);
     unset($options['css_class']);

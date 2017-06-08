@@ -226,9 +226,9 @@ class JsonFeedFields extends RowPluginBase {
   /**
    * Retrieves a views field value from the style plugin.
    *
-   * @param $index
+   * @param int $index
    *   The index count of the row as expected by views_plugin_style::getField().
-   * @param $field_id
+   * @param string $field_id
    *   The ID assigned to the required field in the display.
    *
    * @return string
@@ -245,9 +245,12 @@ class JsonFeedFields extends RowPluginBase {
    * If the field value exists, return it as an absolute URL.
    *
    * @param int $row_index
+   *   The index count of the row as expected by views_plugin_style::getField().
    * @param string $field_id
+   *   The ID assigned to the required field in the display.
    *
-   * @return \Drupal\Core\GeneratedUrl|null|string
+   * @return null|string
+   *   The absolute URL for the field's value.
    */
   protected function getAbsoluteUrlForField($row_index, $field_id) {
     if ($this->options[$field_id]) {
