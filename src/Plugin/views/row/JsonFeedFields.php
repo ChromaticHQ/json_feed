@@ -131,7 +131,7 @@ class JsonFeedFields extends RowPluginBase {
     $form['tags_field'] = [
       '#type' => 'select',
       '#title' => $this->t('tags attribute'),
-      '#description' => $this->t("JSON tags attribute. Accepts a comma seperated list of tag names."),
+      '#description' => $this->t("JSON tags attribute. Accepts a comma separated list of tag names."),
       '#options' => $view_fields_labels,
       '#default_value' => $this->options['tags_field'],
     ];
