@@ -90,7 +90,7 @@ class JsonFeed extends Feed {
     $options['defaults']['default']['style'] = FALSE;
     $options['defaults']['default']['row'] = FALSE;
 
-    // Remove unused form settings.
+    // Remove unusable form settings.
     unset($options['exposed_form']);
     unset($options['exposed_block']);
     unset($options['css_class']);
@@ -105,10 +105,10 @@ class JsonFeed extends Feed {
     parent::optionsSummary($categories, $options);
 
     unset($categories['exposed']);
-    // Hide some settings, as they aren't useful for pure data output.
-    unset($options['show_admin_links'], $options['analyze-theme']);
 
-    // Remove unused form settings.
+    // Hide some settings, as they aren't useful for pure data output.
+    unset($options['show_admin_links']);
+    unset($options['analyze-theme']);
     unset($options['exposed_form']);
     unset($options['exposed_block']);
     unset($options['css_class']);
