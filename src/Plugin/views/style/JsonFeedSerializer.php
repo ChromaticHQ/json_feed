@@ -267,21 +267,21 @@ class JsonFeedSerializer extends StylePluginBase {
    * Get the URL of the next page
    */
   protected function getNextPage() {
-    if ($pager = $this->displayHandler->getPlugin('pager')) {
-      $element = $pager->options['id'];
+    // Check for pager and pager settings
+    $pager = $this->displayHandler->getPlugin('pager');
+    if (!$pager) return null;
 
-      // Not using pager, so don't return a URL
-      if ($element === null) return null;
+    $element = empty($pager->options['id']) ? null : $pager->options['id'];
+    if (!$element) return null;
 
-      global $pager_page_array, $pager_total;
+    global $pager_page_array, $pager_total;
 
-      // Return the URL of the next page if there are any more
-      if ($pager_page_array[$element] < ($pager_total[$element] - 1)) {
-        $options = [
-          'query' => pager_query_add_page([], $element, $pager_page_array[$element] + 1),
-        ];
-        return Url::fromRoute('<current>', [], $options)->setAbsolute()->toString();
-      }
+    // Return the URL of the next page if there are any more
+    if ($pager_page_array[$element] < ($pager_total[$element] - 1)) {
+      $options = [
+        'query' => pager_query_add_page([], $element, $pager_page_array[$element] + 1),
+      ];
+      return Url::fromRoute('<current>', [], $options)->setAbsolute()->toString();
     }
 
     return null;
