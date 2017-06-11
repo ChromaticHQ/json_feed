@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\json_feed\Tests\Plugin;
+namespace Drupal\json_feed\Tests\Views\Plugin;
 
 use Drupal\Core\Url;
 use Drupal\views\Tests\Plugin\PluginTestBase;
