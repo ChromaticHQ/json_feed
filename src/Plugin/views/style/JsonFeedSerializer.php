@@ -206,7 +206,7 @@ class JsonFeedSerializer extends StylePluginBase {
       $feed->next_url = $next_url;
     }
 
-    $feed->expired = $this->options['expired'] ? TRUE : FALSE;
+    $feed->expired = $this->isFeedExpired();
     $feed->items = $items;
 
     return Json::encode($feed);
@@ -302,6 +302,19 @@ class JsonFeedSerializer extends StylePluginBase {
   protected function getFavicon() {
     $favicon = theme_get_setting('favicon.url');
     return $favicon ? Url::fromUserInput($favicon)->setAbsolute()->toString() : NULL;
+  }
+
+  /**
+   * Determine if the feed is expired.
+   *
+   * @return bool
+   *   TRUE if the feed is expired, else FALSE.
+   */
+  protected function isFeedExpired() {
+    if (empty($this->options['expired'])) {
+      return FALSE;
+    }
+    return $this->options['expired'] ? TRUE : FALSE;
   }
 
 }
