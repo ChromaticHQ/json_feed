@@ -192,22 +192,26 @@ class JsonFeedSerializer extends StylePluginBase {
     }
     unset($this->view->row_index);
 
-    // Create feed object.
-    $feed = new \stdClass();
-    $feed->version = 'https://jsonfeed.org/version/1';
-    $feed->title = $this->getTitle();
-    $feed->description = $this->getDescription();
-    $feed->home_page_url = $this->getFeedHomePageUrl();
-    $feed->feed_url = $this->displayHandler->getUrl()->setAbsolute()->toString();
-    $feed->favicon = $this->getFavicon();
-    $feed->author = $this->getAuthor();
+    // Create feed.
+    $feed['version'] = 'https://jsonfeed.org/version/1';
+    $feed['title'] = $this->getTitle();
+    $feed['description'] = $this->getDescription();
+    $feed['home_page_url'] = $this->getFeedHomePageUrl();
+    $feed['feed_url'] = $this->displayHandler->getUrl()->setAbsolute()->toString();
+    $feed['favicon'] = $this->getFavicon();
+    $feed['author'] = $this->getAuthor();
 
     if ($next_url = $this->getNextPage()) {
-      $feed->next_url = $next_url;
+      $feed['next_url'] = $next_url;
     }
 
-    $feed->expired = $this->isFeedExpired();
-    $feed->items = $items;
+    $feed['items'] = $items;
+
+    // Remove empty attributes.
+    $feed = array_filter($feed);
+
+    // Add expired, which if false would be stripped out by array_filter.
+    $feed['expired'] = $this->isFeedExpired();
 
     return Json::encode($feed);
   }

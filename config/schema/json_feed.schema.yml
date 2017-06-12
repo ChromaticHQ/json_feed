@@ -8,6 +8,15 @@ views.display.json_feed:
   path:
     type: string
     label: 'Feed display path'
+
+views.style.json_feed_serializer:
+  type: views_style
+  label: 'JSON Feed style options'
+  mapping:
+    description:
+      type: string
+      label: 'Feed description'
+
 views.row.json_feed_fields:
   type: views_row
   label: 'JSON Feed field options'

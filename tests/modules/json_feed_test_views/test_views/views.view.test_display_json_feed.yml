@@ -282,6 +282,10 @@ display:
       display_extenders: {  }
       sitename_title: 0
       path: test-json-feed-display/json
+      style:
+        type: json_feed_serializer
+        options:
+          description: 'Test feed description.'
       row:
         type: json_feed_fields
         options:

@@ -81,7 +81,7 @@ class DisplayJsonFeedTest extends PluginTestBase {
     $this->assertEqual('test_display_json_feed', $json_response['title'], 'JSON Feed title set correctly.');
 
     $this->assertTrue(array_key_exists('description', $json_response), 'JSON Feed description present.');
-    // @TODO: Implement test for description attribute value.
+    $this->assertEqual('Test feed description.', $json_response['description'], 'JSON Feed description set correctly.');
 
     $this->assertTrue(array_key_exists('home_page_url', $json_response), 'JSON Feed home_page_url present.');
     // @TODO: Implement test for home_page_url attribute value.
