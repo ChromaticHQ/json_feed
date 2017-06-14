@@ -176,7 +176,7 @@ class DisplayJsonFeedTest extends PluginTestBase {
     * Retrieve subsequent page of feed items.
     *
     * @param array $feed_content
-    *   TK.
+    *   An array of JSON feed attributes/items.
     *
     * @return array
     *   An array of JSON feed attributes/items.
