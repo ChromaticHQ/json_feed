@@ -49,6 +49,20 @@ class DisplayJsonFeedTest extends PluginTestBase {
   protected $htmlAllowedAttributes = ['content_html'];
 
   /**
+   * Expected number of items per page.
+   *
+   * @var int
+   */
+  protected $feedItemsPerPage = 10;
+
+  /**
+   * The number of test nodes to create.
+   *
+   * @var int
+   */
+  protected $nodesToCreate = 25;
+
+  /**
    * {@inheritdoc}
    */
   protected function setUp() {
@@ -61,17 +75,20 @@ class DisplayJsonFeedTest extends PluginTestBase {
 
     $this->drupalCreateContentType(['type' => 'page']);
 
-    // Verify a title with HTML entities is properly escaped.
-    $node_title = 'This "cool" & "neat" article\'s title';
-    $node = $this->drupalCreateNode([
-      'title' => $node_title,
+    $node_data = [
+      'title' => 'This "cool" & "neat" article\'s title',
       'body' => [
         0 => [
+          // Verify content with HTML entities is properly escaped.
           'value' => '<p>A <em>paragraph</em>.</p>',
           'format' => filter_default_format(),
         ],
       ],
-    ]);
+    ];
+
+    for ($i = 0; $i < $this->nodesToCreate; $i++) {
+      $this->drupalCreateNode($node_data);
+    }
   }
 
   /**
@@ -109,7 +126,7 @@ class DisplayJsonFeedTest extends PluginTestBase {
    */
   public function testFeedItems() {
     $json_response = $this->drupalGetJSON($this->feedPath);
-    $this->assertEqual(1, count($json_response['items']), 'JSON Feed returned 1 item.');
+    $this->assertEqual($this->expectedFirstPageItems(), count($json_response['items']), 'JSON Feed returned ' . $this->expectedFirstPageItems() . ' items.');
     $item = $json_response['items'][0];
 
     $this->assertTrue(array_key_exists('date_published', $item), 'JSON Feed item date_published attribute present.');
@@ -129,5 +146,73 @@ class DisplayJsonFeedTest extends PluginTestBase {
       }
     });
   }
+
+   /**
+    * Test feed item pagination.
+    */
+   public function testFeedPagnation() {
+     $feed_content = $this->drupalGetJSON($this->feedPath);
+     if ($this->feedItemsPerPage < $this->nodesToCreate) {
+       $this->assertTrue(array_key_exists('next_url', $feed_content), 'JSON Feed next_url attribute present.');
+     }
+     else {
+       $this->assertFalse(array_key_exists('next_url', $feed_content), 'JSON Feed next_url attribute not present.');
+     }
+     $this->assertEqual($this->expectedFirstPageItems(), count($feed_content['items']), 'JSON Feed first page returned ' . $this->expectedFirstPageItems() . ' items.');
+   }
+
+   /**
+    * Test last page of feed items.
+    */
+   public function testFeedLastPage() {
+     $feed_content = $this->getFeedLastPage();
+
+     $this->assertFalse(array_key_exists('next_url', $feed_content), 'JSON Feed next_url attribute not present on last page.');
+     $expectedLastPageItemsCount = $this->nodesToCreate % $this->feedItemsPerPage;
+     $this->assertEqual($expectedLastPageItemsCount, count($feed_content['items']), 'JSON Feed last page returned ' . $expectedLastPageItemsCount . ' items.');
+   }
+
+   /**
+    * Retrieve subsequent page of feed items.
+    *
+    * @param array $feed_content
+    *   TK.
+    *
+    * @return array
+    *   An array of JSON feed attributes/items.
+    */
+   protected function getFeedNextPage(array $feed_content) {
+     if (empty($feed_content['next_url'])) {
+       return NULL;
+     }
+     return $this->drupalGetJSON($feed_content['next_url']);
+   }
+
+   /**
+    * Retrieve last page of feed items.
+    *
+    * @return array
+    *   An array of JSON feed attributes/items.
+    */
+   protected function getFeedLastPage() {
+     $feed_content = $this->drupalGetJSON($this->feedPath);
+     if (empty($feed_content['next_url'])) {
+       return $feed_content;
+     }
+     while (!empty($feed_content['next_url'])) {
+       $feed_content = $this->getFeedNextPage($feed_content);
+     }
+     return $feed_content;
+   }
+
+   /**
+    * Calculates the expected number of items on the feed's first page.
+    *
+    * @return int
+    *   The expected number of items on the feed's first page.
+    */
+   protected function expectedFirstPageItems() {
+     return min($this->feedItemsPerPage, $this->nodesToCreate);
+   }
 
 }
