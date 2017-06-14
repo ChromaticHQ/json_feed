@@ -42,6 +42,13 @@ class DisplayJsonFeedTest extends PluginTestBase {
   protected $feedPath = 'test-json-feed-display/json';
 
   /**
+   * The JSON Feed attributes that allow HTML markup.
+   *
+   * @var array
+   */
+  protected $htmlAllowedAttributes = ['content_html'];
+
+  /**
    * {@inheritdoc}
    */
   protected function setUp() {
@@ -60,7 +67,7 @@ class DisplayJsonFeedTest extends PluginTestBase {
       'title' => $node_title,
       'body' => [
         0 => [
-          'value' => 'A paragraph',
+          'value' => '<p>A <em>paragraph</em>.</p>',
           'format' => filter_default_format(),
         ],
       ],
@@ -105,6 +112,18 @@ class DisplayJsonFeedTest extends PluginTestBase {
     $this->assertEqual(1, count($json_response['items']), 'JSON Feed returned 1 item.');
 
     // @TODO: Test remaining item attributes.
+  }
+
+  /**
+   * Test fields that should not include HTML.
+   */
+  public function testHtmlPresence() {
+    $json_response = $this->drupalGetJSON($this->feedPath);
+    array_walk_recursive($json_response, function ($item, $key) {
+      if (!is_array($item) && !in_array($key, $this->htmlAllowedAttributes)) {
+        $this->assertEqual(strip_tags($item), $item, 'JSON Feed item: \'' . $key . '\' does not contain HTML.');
+      }
+    });
   }
 
 }

@@ -158,32 +158,9 @@ class JsonFeedSerializer extends StylePluginBase {
   }
 
   /**
-   * Get JSON feed author information.
-   *
-   * @return array
-   *   An array containing the feed's author data.
-   */
-  protected function getAuthor() {
-    if (empty($this->options['author'])) {
-      return [];
-    }
-    $author_data = $this->options['author'];
-
-    $author['name'] = !empty($author_data['author_name_field']) ? $author_data['author_name_field'] : NULL;
-    $author['url'] = !empty($author_data['author_url_field']) ? $author_data['author_url_field'] : NULL;
-    $author['avatar'] = !empty($author_data['author_avatar_field']) ? $author_data['author_avatar_field'] : NULL;
-
-    // Remove empty attributes.
-    $author = array_filter($author);
-
-    return $author;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public function render() {
-
     // Build items list.
     $items = [];
     foreach ($this->view->result as $row_index => $row) {
@@ -194,15 +171,16 @@ class JsonFeedSerializer extends StylePluginBase {
 
     // Create feed.
     $feed['version'] = 'https://jsonfeed.org/version/1';
-    $feed['title'] = $this->getTitle();
-    $feed['description'] = $this->getDescription();
-    $feed['home_page_url'] = $this->getFeedHomePageUrl();
-    $feed['feed_url'] = $this->displayHandler->getUrl()->setAbsolute()->toString();
-    $feed['favicon'] = $this->getFavicon();
-    $feed['author'] = $this->getAuthor();
+    $feed['title'] = strip_tags($this->getTitle());
+    $feed['description'] = strip_tags($this->getDescription());
+    $feed['home_page_url'] = strip_tags($this->getFeedHomePageUrl());
+    $feed['feed_url'] = strip_tags($this->displayHandler->getUrl()->setAbsolute()->toString());
+    $feed['favicon'] = strip_tags($this->getFavicon());
+
+    $feed['author'] = array_map('strip_tags', $this->getAuthor());
 
     if ($next_url = $this->getNextPage()) {
-      $feed['next_url'] = $next_url;
+      $feed['next_url'] = strip_tags($next_url);
     }
 
     $feed['items'] = $items;
@@ -214,6 +192,28 @@ class JsonFeedSerializer extends StylePluginBase {
     $feed['expired'] = $this->isFeedExpired();
 
     return Json::encode($feed);
+  }
+
+  /**
+   * Get JSON feed author information.
+   *
+   * @return array
+   *   An array containing the feed's author data.
+   */
+  protected function getAuthor() {
+    if (empty($this->options['author'])) {
+      return [];
+    }
+    $author_data = $this->options['author'];
+
+    $author['name'] = !empty($author_data['author_name_field']) ? strip_tags($author_data['author_name_field']) : NULL;
+    $author['url'] = !empty($author_data['author_url_field']) ? strip_tags($author_data['author_url_field']) : NULL;
+    $author['avatar'] = !empty($author_data['author_avatar_field']) ? strip_tags($author_data['author_avatar_field']) : NULL;
+
+    // Remove empty attributes.
+    $author = array_filter($author);
+
+    return $author;
   }
 
   /**

@@ -199,22 +199,19 @@ class JsonFeedFields extends RowPluginBase {
     // Create the JSON item.
     $item = [];
     $row_index = $this->view->row_index;
-    $item['id'] = $this->getField($row_index, $this->options['id_field']);
-    $item['url'] = $this->getAbsoluteUrlForField($row_index, 'url_field');
-    $item['title'] = $this->getField($row_index, $this->options['title_field']);
+    $item['id'] = strip_tags($this->getField($row_index, $this->options['id_field']));
+    $item['url'] = strip_tags($this->getAbsoluteUrlForField($row_index, 'url_field'));
+    $item['title'] = strip_tags($this->getField($row_index, $this->options['title_field']));
     $item['content_html'] = $this->getField($row_index, $this->options['content_html_field']);
-    $item['content_text'] = $this->getField($row_index, $this->options['content_text_field']);
-    $item['summary'] = $this->getField($row_index, $this->options['summary_field']);
-    $item['image'] = $this->getAbsoluteUrlForField($row_index, 'image_field');
-    $item['banner_image'] = $this->getAbsoluteUrlForField($row_index, 'banner_image_field');
-    $item['date_published'] = $this->getField($row_index, $this->options['date_published_field']);
-    $item['date_modified'] = $this->getField($row_index, $this->options['date_modified_field']);
-    $item['author'] = [
-      'name' => $this->getField($row_index, $this->options['author_name_field']),
-      'url' => $this->getAbsoluteUrlForField($row_index, 'author_url_field'),
-      'avatar' => $this->getField($row_index, $this->options['author_avatar_field']),
-    ];
-    $item['tags'] = $this->getTags($row_index, $this->options['tags_field']);
+    $item['content_text'] = strip_tags($this->getField($row_index, $this->options['content_text_field']));
+    $item['summary'] = strip_tags($this->getField($row_index, $this->options['summary_field']));
+    $item['image'] = strip_tags($this->getAbsoluteUrlForField($row_index, 'image_field'));
+    $item['banner_image'] = strip_tags($this->getAbsoluteUrlForField($row_index, 'banner_image_field'));
+    $item['date_published'] = strip_tags($this->getField($row_index, $this->options['date_published_field']));
+    $item['date_modified'] = strip_tags($this->getField($row_index, $this->options['date_modified_field']));
+
+    $item['author'] = array_map('strip_tags', $this->getAuthor($row_index, $this->options['tags_field']));
+    $item['tags'] = array_map('strip_tags', $this->getTags($row_index, $this->options['tags_field']));
 
     // Remove empty attributes.
     $item['author'] = array_filter($item['author']);
@@ -277,6 +274,25 @@ class JsonFeedFields extends RowPluginBase {
   protected function getTags($row_index, $field_id) {
     $tags_csv = $this->getField($row_index, $field_id);
     return array_map('trim', explode(',', $tags_csv));
+  }
+
+  /**
+   * Retrieve and format author attribute values.
+   *
+   * @param int $row_index
+   *   The index count of the row as expected by views_plugin_style::getField().
+   * @param string $field_id
+   *   The ID assigned to the required field in the display.
+   *
+   * @return array
+   *   An array of author attributes.
+   */
+  protected function getAuthor($row_index, $field_id) {
+    return [
+      'name' => $this->getField($row_index, $field_id),
+      'url' => $this->getAbsoluteUrlForField($row_index, 'author_url_field'),
+      'avatar' => $this->getField($row_index, $field_id),
+    ];
   }
 
 }
