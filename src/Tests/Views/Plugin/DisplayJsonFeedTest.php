@@ -100,7 +100,7 @@ class DisplayJsonFeedTest extends PluginTestBase {
     $favicon_path = Url::fromUserInput(theme_get_setting('favicon.url'))->setAbsolute()->toString();
     $this->assertEqual($favicon_path, $json_response['favicon'], 'JSON Feed favicon set correctly.');
 
-    $this->assertTrue(array_key_exists('expired', $json_response), 'JSON Feed exired attribute present.');
+    $this->assertTrue(array_key_exists('expired', $json_response), 'JSON Feed expired attribute present.');
     $this->assertEqual(FALSE, $json_response['expired'], 'JSON Feed expired attribute set to FALSE.');
   }
 
@@ -110,6 +110,10 @@ class DisplayJsonFeedTest extends PluginTestBase {
   public function testFeedItems() {
     $json_response = $this->drupalGetJSON($this->feedPath);
     $this->assertEqual(1, count($json_response['items']), 'JSON Feed returned 1 item.');
+    $item = $json_response['items'][0];
+
+    $this->assertTrue(array_key_exists('date_published', $item), 'JSON Feed item date_published attribute present.');
+    $this->assertTrue(array_key_exists('date_modified', $item), 'JSON Feed item date_modified attribute present.');
 
     // @TODO: Test remaining item attributes.
   }
