@@ -425,6 +425,7 @@ display:
         options:
           id_field: uuid
           url_field: path
+          external_url_field: ''
           title_field: title
           content_html_field: body
           content_text_field: ''

@@ -64,6 +64,14 @@ class JsonFeedFields extends RowPluginBase {
       '#required' => TRUE,
     ];
 
+    $form['external_url_field'] = [
+      '#type' => 'select',
+      '#title' => $this->t('external_url attribute'),
+      '#description' => $this->t('URL of a page elsewhere that this item is referencing.'),
+      '#options' => $view_fields_labels,
+      '#default_value' => $this->options['external_url_field'],
+    ];
+
     $form['title_field'] = [
       '#type' => 'select',
       '#title' => $this->t('title attribute'),
@@ -201,6 +209,7 @@ class JsonFeedFields extends RowPluginBase {
     $row_index = $this->view->row_index;
     $item['id'] = strip_tags($this->getField($row_index, $this->options['id_field']));
     $item['url'] = strip_tags($this->getAbsoluteUrlForField($row_index, 'url_field'));
+    $item['external_url'] = strip_tags($this->getAbsoluteUrlForField($row_index, 'external_url_field'));
     $item['title'] = strip_tags($this->getField($row_index, $this->options['title_field']));
     $item['content_html'] = $this->getField($row_index, $this->options['content_html_field']);
     $item['content_text'] = strip_tags($this->getField($row_index, $this->options['content_text_field']));
