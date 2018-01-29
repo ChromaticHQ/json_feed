@@ -259,7 +259,7 @@ class JsonFeedFields extends RowPluginBase {
    *   The absolute URL for the field's value.
    */
   protected function getAbsoluteUrlForField($row_index, $field_id) {
-    if ($this->options[$field_id]) {
+    if (isset($this->options[$field_id])) {
       $field_value = $this->getField($row_index, $this->options[$field_id]);
       if (strpos($field_value, '/') !== 0) {
         $field_value = '/' . $field_value;
