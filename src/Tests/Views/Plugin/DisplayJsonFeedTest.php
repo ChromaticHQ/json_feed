@@ -147,72 +147,72 @@ class DisplayJsonFeedTest extends PluginTestBase {
     });
   }
 
-   /**
-    * Test feed item pagination.
-    */
-   public function testFeedPagnation() {
-     $feed_content = $this->drupalGetJSON($this->feedPath);
-     if ($this->feedItemsPerPage < $this->nodesToCreate) {
-       $this->assertTrue(array_key_exists('next_url', $feed_content), 'JSON Feed next_url attribute present.');
-     }
-     else {
-       $this->assertFalse(array_key_exists('next_url', $feed_content), 'JSON Feed next_url attribute not present.');
-     }
-     $this->assertEqual($this->expectedFirstPageItems(), count($feed_content['items']), 'JSON Feed first page returned ' . $this->expectedFirstPageItems() . ' items.');
-   }
+  /**
+   * Test feed item pagination.
+   */
+  public function testFeedPagnation() {
+    $feed_content = $this->drupalGetJSON($this->feedPath);
+    if ($this->feedItemsPerPage < $this->nodesToCreate) {
+      $this->assertTrue(array_key_exists('next_url', $feed_content), 'JSON Feed next_url attribute present.');
+    }
+    else {
+      $this->assertFalse(array_key_exists('next_url', $feed_content), 'JSON Feed next_url attribute not present.');
+    }
+    $this->assertEqual($this->expectedFirstPageItems(), count($feed_content['items']), 'JSON Feed first page returned ' . $this->expectedFirstPageItems() . ' items.');
+  }
 
-   /**
-    * Test last page of feed items.
-    */
-   public function testFeedLastPage() {
-     $feed_content = $this->getFeedLastPage();
+  /**
+   * Test last page of feed items.
+   */
+  public function testFeedLastPage() {
+    $feed_content = $this->getFeedLastPage();
 
-     $this->assertFalse(array_key_exists('next_url', $feed_content), 'JSON Feed next_url attribute not present on last page.');
-     $expectedLastPageItemsCount = $this->nodesToCreate % $this->feedItemsPerPage;
-     $this->assertEqual($expectedLastPageItemsCount, count($feed_content['items']), 'JSON Feed last page returned ' . $expectedLastPageItemsCount . ' items.');
-   }
+    $this->assertFalse(array_key_exists('next_url', $feed_content), 'JSON Feed next_url attribute not present on last page.');
+    $expectedLastPageItemsCount = $this->nodesToCreate % $this->feedItemsPerPage;
+    $this->assertEqual($expectedLastPageItemsCount, count($feed_content['items']), 'JSON Feed last page returned ' . $expectedLastPageItemsCount . ' items.');
+  }
 
-   /**
-    * Retrieve subsequent page of feed items.
-    *
-    * @param array $feed_content
-    *   An array of JSON feed attributes/items.
-    *
-    * @return array
-    *   An array of JSON feed attributes/items.
-    */
-   protected function getFeedNextPage(array $feed_content) {
-     if (empty($feed_content['next_url'])) {
-       return NULL;
-     }
-     return $this->drupalGetJSON($feed_content['next_url']);
-   }
+  /**
+   * Retrieve subsequent page of feed items.
+   *
+   * @param array $feed_content
+   *   An array of JSON feed attributes/items.
+   *
+   * @return array
+   *   An array of JSON feed attributes/items.
+   */
+  protected function getFeedNextPage(array $feed_content) {
+    if (empty($feed_content['next_url'])) {
+      return NULL;
+    }
+    return $this->drupalGetJSON($feed_content['next_url']);
+  }
 
-   /**
-    * Retrieve last page of feed items.
-    *
-    * @return array
-    *   An array of JSON feed attributes/items.
-    */
-   protected function getFeedLastPage() {
-     $feed_content = $this->drupalGetJSON($this->feedPath);
-     if (empty($feed_content['next_url'])) {
-       return $feed_content;
-     }
-     while (!empty($feed_content['next_url'])) {
-       $feed_content = $this->getFeedNextPage($feed_content);
-     }
-     return $feed_content;
-   }
+  /**
+   * Retrieve last page of feed items.
+   *
+   * @return array
+   *   An array of JSON feed attributes/items.
+   */
+  protected function getFeedLastPage() {
+    $feed_content = $this->drupalGetJSON($this->feedPath);
+    if (empty($feed_content['next_url'])) {
+      return $feed_content;
+    }
+    while (!empty($feed_content['next_url'])) {
+      $feed_content = $this->getFeedNextPage($feed_content);
+    }
+    return $feed_content;
+  }
 
-   /**
-    * Calculates the expected number of items on the feed's first page.
-    *
-    * @return int
-    *   The expected number of items on the feed's first page.
-    */
-   protected function expectedFirstPageItems() {
-     return min($this->feedItemsPerPage, $this->nodesToCreate);
-   }
+  /**
+   * Calculates the expected number of items on the feed's first page.
+   *
+   * @return int
+   *   The expected number of items on the feed's first page.
+   */
+  protected function expectedFirstPageItems() {
+    return min($this->feedItemsPerPage, $this->nodesToCreate);
+  }
 
 }
