@@ -219,7 +219,7 @@ class JsonFeedFields extends RowPluginBase {
     $item['date_published'] = strip_tags($this->getField($row_index, $this->options['date_published_field']));
     $item['date_modified'] = strip_tags($this->getField($row_index, $this->options['date_modified_field']));
 
-    $item['author'] = array_map('strip_tags', $this->getAuthor($row_index, $this->options['tags_field']));
+    $item['author'] = array_map('strip_tags', $this->getAuthor($row_index, $this->options));
     $item['tags'] = array_map('strip_tags', $this->getTags($row_index, $this->options['tags_field']));
 
     // Remove empty attributes.
@@ -290,17 +290,17 @@ class JsonFeedFields extends RowPluginBase {
    *
    * @param int $row_index
    *   The index count of the row as expected by views_plugin_style::getField().
-   * @param string $field_id
-   *   The ID assigned to the required field in the display.
+   * @param array $options
+   *   The full options array which contains author field configurations.
    *
    * @return array
    *   An array of author attributes.
    */
-  protected function getAuthor($row_index, $field_id) {
+  protected function getAuthor($row_index, array $options) {
     return [
-      'name' => $this->getField($row_index, $field_id),
-      'url' => $this->getAbsoluteUrlForField($row_index, 'author_url_field'),
-      'avatar' => $this->getField($row_index, $field_id),
+      'name' => $this->getField($row_index, $options['author_name_field']),
+      'url' => $this->getAbsoluteUrlForField($row_index, $options['author_url_field']),
+      'avatar' => $this->getField($row_index, $options['author_avatar_field']),
     ];
   }
 

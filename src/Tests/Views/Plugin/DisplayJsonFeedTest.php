@@ -14,6 +14,8 @@ use Drupal\views\Tests\ViewTestData;
  */
 class DisplayJsonFeedTest extends PluginTestBase {
 
+  const ADMIN_NAME = 'John Appleseed';
+
   /**
    * Modules to enable.
    *
@@ -70,7 +72,7 @@ class DisplayJsonFeedTest extends PluginTestBase {
 
     ViewTestData::createTestViews(get_class($this), ['json_feed_test_views']);
 
-    $admin_user = $this->drupalCreateUser(['administer site configuration']);
+    $admin_user = $this->drupalCreateUser(['administer site configuration'], self::ADMIN_NAME);
     $this->drupalLogin($admin_user);
 
     $this->drupalCreateContentType(['type' => 'page']);
@@ -131,8 +133,21 @@ class DisplayJsonFeedTest extends PluginTestBase {
 
     $this->assertTrue(array_key_exists('date_published', $item), 'JSON Feed item date_published attribute present.');
     $this->assertTrue(array_key_exists('date_modified', $item), 'JSON Feed item date_modified attribute present.');
+    $this->assertTrue(array_key_exists('tags', $item), 'JSON Feed item tags attribute present.');
 
     // @TODO: Test remaining item attributes.
+  }
+
+  /**
+   * Test the author feed items.
+   */
+  public function testFeedItemAuthor() {
+    $json_response = $this->drupalGetJSON($this->feedPath);
+    $item = $json_response['items'][0];
+    $this->assertTrue(array_key_exists('author', $item), 'JSON Feed item author attribute present.');
+    $author_info = $item['author'];
+    $this->assertTrue(array_key_exists('name', $author_info), 'JSON Feed item author name attribute present.');
+    $this->assertEqual(self::ADMIN_NAME, $author_info['name'], 'JSON Feed item author name set correctly.');
   }
 
   /**
