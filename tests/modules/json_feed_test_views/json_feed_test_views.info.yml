@@ -4,5 +4,5 @@ description: 'Provides default views for json_feed tests.'
 package: Testing
 core: 8.x
 dependencies:
-  - views
-  - json_feed
+  - drupal:views
+  - json_feed:json_feed
